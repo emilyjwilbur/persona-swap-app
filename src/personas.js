@@ -15,8 +15,8 @@ export const personas = [
   {
     name: "Cheerleader Mode",
     styles: {
-      backgroundColor: "yellow",
-      color: "pink",
+      backgroundColor: "pink",
+      color: "white",
       fontFamily: "Comic Sans, sans-serif",
     },
     microcopy: {
