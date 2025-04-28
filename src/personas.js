@@ -7,11 +7,11 @@ export const personas = [
       angle: "45deg", // only for linear
       animation: true,
       textColor: "#ffffff",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: "'UnifrakturCook', sans-serif", // Gothic font
     },
     microcopy: {
-      tooltip: "This will probably break.",
-      button: "Whatever",
+      tooltip: "Darkness falls...",
+      button: "Embrace the night",
     },
     blurIntensity: 10, // <-- NUMBER, no "px"
   },
@@ -23,7 +23,7 @@ export const personas = [
       angle: "45deg", // only for linear
       animation: true,
       textColor: "#ffffff",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: "'Fredoka One', sans-serif",
     },
     microcopy: {
       tooltip: "You got this! 💪",
