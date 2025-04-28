@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
 
 function App() {
-  const [personas, setPersonas] = useState(initialPersonas); // Store personas in state
+  const [personas, setPersonas] = useState(() => {
+    const saved = localStorage.getItem("personas");
+    return saved ? JSON.parse(saved) : initialPersonas;
+  });
+
   const [activePersona, setActivePersona] = useState(personas[0]);
   const [newPersona, setNewPersona] = useState({
     name: "",
@@ -88,9 +92,10 @@ function App() {
 
   const handleAddPersona = () => {
     if (validateForm()) {
-      setPersonas((prevPersonas) => [...prevPersonas, newPersona]);
+      const updatedPersonas = [...personas, newPersona];
+      setPersonas(updatedPersonas);
       setActivePersona(newPersona);
-      console.log("Updated Personas:", personas);
+      localStorage.setItem("personas", JSON.stringify(updatedPersonas));
     }
   };
 
