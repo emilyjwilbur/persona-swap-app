@@ -18,7 +18,7 @@ Examples of personas include:
 
 ## 💡 Why It's Awesome
 
-- **Totally Unique & Fun**: Spice up your browsing experience with custom website personalities.
+- **Spice up your browsing experience with custom website personalities.**
 
 - **Customizable**: Create your own personas and see them in action.
 
@@ -36,19 +36,9 @@ Examples of personas include:
 
 ## 🔥 Personas Could Include
 
-- 🧛 **Goth Mode**: Black and red color scheme, creepy tooltips like “This will probably break.”
-- 🐸 **Cottagecore Mode**: Soft greens/beiges, serif fonts, gentle button text like “Gently Submit.”
-- 🤖 **AI Mode**: Futuristic fonts, robotic messages like “Form submitted. Await judgment.”
-
----
-
-## 🧠 Tech Wins to Show Off
-
-- **Dynamic Theming**: Easily toggle between different themes using React context/state.
-- **DOM Targeting & Manipulation**: Inject and modify styles and content based on the active persona.
-- **Configurable Persona Editor**: Users can create their own custom personas (moods) for a more personalized experience.
-- **Chrome Extension Integration** (optional): Modify the UI of any website on the fly using a Chrome extension.
-- **Mood Pack Export/Import**: Share and save custom "mood packs" for easy sharing across devices or users.
+- **Goth Mode**: Black and red color scheme, creepy tooltips like “This will probably break.”
+- **Cottagecore Mode**: Soft greens/beiges, serif fonts, gentle button text like “Gently Submit.”
+- **AI Mode**: Futuristic fonts, robotic messages like “Form submitted. Await judgment.”
 
 ---
 
