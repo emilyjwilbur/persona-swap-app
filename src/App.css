@@ -1,24 +1,42 @@
+/* App.css */
+
 .App {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
+  padding: 40px;
   text-align: center;
+  background: #f7f7f7;
 }
 
 .persona-buttons {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
 }
 
 .persona-buttons button {
   padding: 10px 20px;
-  font-size: 16px;
   border-radius: 8px;
-  cursor: pointer;
   border: none;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #eee;
+  transition: background-color 0.3s;
+}
+
+.persona-buttons button:hover {
+  background-color: #ddd;
+}
+
+.preview-card {
+  padding: 30px;
+  border-radius: 16px;
+  min-width: 300px;
+  min-height: 200px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

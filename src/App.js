@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { personas } from "./personas";
-import "./App.css"; // 👈 make sure this is imported!
+import { motion, AnimatePresence } from "framer-motion"; // 👈 import framer-motion
+import "./App.css";
 
 function App() {
-  // State to keep track of the selected persona
-  const [activePersona, setActivePersona] = useState(personas[0]); // default to the first persona
+  const [activePersona, setActivePersona] = useState(personas[0]);
 
-  // When the user clicks a persona button
   const handlePersonaChange = (persona) => {
     setActivePersona(persona);
   };
 
-  // Dynamic style based on the active persona
   const personaStyle = {
     backgroundColor: activePersona.styles.backgroundColor,
     color: activePersona.styles.color,
@@ -34,12 +32,22 @@ function App() {
         ))}
       </div>
 
-      {/* Preview Card */}
-      <div className="preview-card" style={personaStyle}>
-        <h2>Preview Area</h2>
-        <p>{activePersona.microcopy.tooltip}</p>
-        <button>{activePersona.microcopy.button}</button>
-      </div>
+      {/* Animated Preview Card */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activePersona.name} // 👈 important for AnimatePresence to detect changes
+          className="preview-card"
+          style={personaStyle}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2>Preview Area</h2>
+          <p>{activePersona.microcopy.tooltip}</p>
+          <button>{activePersona.microcopy.button}</button>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
