@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { personas } from "./personas";
+import { personas as initialPersonas } from "./personas";
 import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
 
 function App() {
+  const [personas, setPersonas] = useState(initialPersonas); // Store personas in state
   const [activePersona, setActivePersona] = useState(personas[0]);
   const [newPersona, setNewPersona] = useState({
     name: "",
@@ -26,11 +27,9 @@ function App() {
     blurIntensity: "",
   });
 
-  // Handle changes in the form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Check if we're changing the text fields (tooltip or button)
     if (name === "tooltip" || name === "button") {
       setNewPersona({
         ...newPersona,
@@ -47,7 +46,6 @@ function App() {
     }
   };
 
-  // Handle persona style changes (colors and fonts)
   const handleStyleChange = (e) => {
     const { name, value } = e.target;
     setNewPersona({
@@ -59,31 +57,26 @@ function App() {
     });
   };
 
-  // Validate form inputs
   const validateForm = () => {
     let isValid = true;
     let newErrors = {};
 
-    // Validate name
     if (!newPersona.name) {
       newErrors.name = "Name is required.";
       isValid = false;
     }
 
-    // Validate background color
     if (!/^#[0-9A-F]{6}$/i.test(newPersona.styles.backgroundColor)) {
       newErrors.backgroundColor =
         "Please select a valid hex color for background.";
       isValid = false;
     }
 
-    // Validate text color
     if (!/^#[0-9A-F]{6}$/i.test(newPersona.styles.color)) {
       newErrors.textColor = "Please select a valid hex color for text.";
       isValid = false;
     }
 
-    // Validate blur intensity
     if (newPersona.blurIntensity < 0 || newPersona.blurIntensity > 20) {
       newErrors.blurIntensity = "Blur intensity must be between 0 and 20.";
       isValid = false;
@@ -93,16 +86,14 @@ function App() {
     return isValid;
   };
 
-  // Handle adding a new persona
   const handleAddPersona = () => {
     if (validateForm()) {
-      const updatedPersonas = [...personas, newPersona];
-      setActivePersona(newPersona); // Apply the new persona as active
-      console.log("Updated Personas:", updatedPersonas);
+      setPersonas((prevPersonas) => [...prevPersonas, newPersona]);
+      setActivePersona(newPersona);
+      console.log("Updated Personas:", personas);
     }
   };
 
-  // Reset the form to the default state
   const handleReset = () => {
     setNewPersona({
       name: "",
@@ -119,9 +110,6 @@ function App() {
     });
     setErrors({});
   };
-
-  // Debugging the state when colors change
-  console.log("Current Persona Colors:", newPersona.styles);
 
   return (
     <div>
