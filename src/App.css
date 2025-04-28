@@ -72,3 +72,48 @@
   min-height: 200px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+/* Persona Customization Styles */
+.persona-customization {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.persona-customization h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.persona-customization form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.persona-customization label {
+  font-size: 16px;
+}
+
+.persona-customization input {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.persona-customization button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.persona-customization button:hover {
+  background-color: #0056b3;
+}
