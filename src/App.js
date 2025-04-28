@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { personas } from "./personas"; // Import the personas data
 
 function App() {
+  // Set initial persona state (e.g., starting with the first persona)
+  const [activePersona, setActivePersona] = useState(personas[0]);
+
+  // Function to change persona
+  const handlePersonaChange = (persona) => {
+    setActivePersona(persona);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        backgroundColor: activePersona.styles.backgroundColor,
+        color: activePersona.styles.color,
+        fontFamily: activePersona.styles.fontFamily,
+      }}
+    >
+      <h1>Welcome to PersonaSwap!</h1>
+      <button>{activePersona.microcopy.button}</button>
+      <p>{activePersona.microcopy.tooltip}</p>
+
+      <div>
+        {/* Map through the personas and create buttons for each one */}
+        {personas.map((persona) => (
+          <button
+            key={persona.name}
+            onClick={() => handlePersonaChange(persona)}
+          >
+            {persona.name}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
