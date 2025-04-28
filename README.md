@@ -19,8 +19,7 @@ Examples of personas include:
 ## 💡 Why It's Awesome
 
 - **Totally Unique & Fun**: Spice up your browsing experience with custom website personalities.
-- **Creative & Technical**: Show off your understanding of DOM manipulation, styling systems, and UX writing.
-- **Perfect for Interviews**: A fun project that blends creativity with technical skills, ideal for making an impression.
+
 - **Customizable**: Create your own personas and see them in action.
 
 ---
