@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { personas } from "./personas";
-import { motion, AnimatePresence } from "framer-motion"; // 👈 import framer-motion
+import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
 
 function App() {
@@ -17,27 +17,32 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>PersonaSwap 🎭</h1>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activePersona.name + "-background"}
+        className="App"
+        style={personaStyle}
+        initial={{ opacity: 0, filter: `blur(${activePersona.blurIntensity})` }}
+        animate={{ opacity: 1, filter: "blur(0px)" }}
+        exit={{ opacity: 0, filter: `blur(${activePersona.blurIntensity})` }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1>PersonaSwap 🎭</h1>
 
-      {/* Persona Buttons */}
-      <div className="persona-buttons">
-        {personas.map((persona) => (
-          <button
-            key={persona.name}
-            onClick={() => handlePersonaChange(persona)}
-          >
-            {persona.name}
-          </button>
-        ))}
-      </div>
+        <div className="persona-buttons">
+          {personas.map((persona) => (
+            <button
+              key={persona.name}
+              onClick={() => handlePersonaChange(persona)}
+            >
+              {persona.name}
+            </button>
+          ))}
+        </div>
 
-      {/* Animated Preview Card */}
-      <AnimatePresence mode="wait">
         <motion.div
-          key={activePersona.name} // 👈 important for AnimatePresence to detect changes
+          key={activePersona.name + "-card"}
           className="preview-card"
-          style={personaStyle}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
@@ -47,8 +52,8 @@ function App() {
           <p>{activePersona.microcopy.tooltip}</p>
           <button>{activePersona.microcopy.button}</button>
         </motion.div>
-      </AnimatePresence>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
