@@ -115,6 +115,11 @@ function App() {
     });
     setErrors({});
   };
+  const handleClearPersonas = () => {
+    localStorage.removeItem("personas");
+    setPersonas(initialPersonas);
+    setActivePersona(initialPersonas[0]);
+  };
 
   return (
     <div>
@@ -156,6 +161,9 @@ function App() {
             <p>{activePersona.microcopy.tooltip}</p>
             <button>{activePersona.microcopy.button}</button>
           </motion.div>
+          <button onClick={handleClearPersonas} className="reset-button">
+            Clear Saved Personas
+          </button>
         </motion.div>
       </AnimatePresence>
 
