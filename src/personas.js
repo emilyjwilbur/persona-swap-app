@@ -2,40 +2,49 @@ export const personas = [
   {
     name: "Goth Mode",
     styles: {
-      backgroundColor: "#1a1a1a",
-      color: "#ff0000",
-      fontFamily: "'Courier New', monospace",
+      gradientType: "linear",
+      colors: ["black", "#000000"],
+      angle: "45deg", // only for linear
+      animation: true,
+      textColor: "#ffffff",
+      fontFamily: "Arial, sans-serif",
     },
     microcopy: {
       tooltip: "This will probably break.",
       button: "Whatever",
     },
-    blurIntensity: "10px", // <-- Add this
+    blurIntensity: 10, // <-- NUMBER, no "px"
   },
   {
     name: "Cheerleader Mode",
     styles: {
-      backgroundColor: "#ffe4e1",
-      color: "#ff69b4",
-      fontFamily: "'Comic Sans MS', cursive",
+      gradientType: "linear",
+      colors: ["pink", "#000000"],
+      angle: "45deg", // only for linear
+      animation: true,
+      textColor: "#ffffff",
+      fontFamily: "Arial, sans-serif",
     },
     microcopy: {
       tooltip: "You got this! 💪",
       button: "Let's Go!",
     },
-    blurIntensity: "4px", // <-- Softer blur
+    blurIntensity: 4, // <-- NUMBER, no "px"
   },
   {
     name: "Grumpy Dev Mode",
     styles: {
-      backgroundColor: "#282c34",
-      color: "#61dafb",
-      fontFamily: "'Fira Code', monospace",
+      gradientType: "linear",
+      colors: ["blue", "#000000"],
+      angle: "45deg", // only for linear
+      animation: true,
+      textColor: "#ffffff",
+      fontFamily: "Arial, sans-serif",
     },
     microcopy: {
       tooltip: "Don't bother.",
       button: "Fine, Submit it.",
     },
-    blurIntensity: "6px", // <-- Medium blur
+    blurIntensity: 6, // <-- NUMBER, no "px"
   },
 ];

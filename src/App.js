@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { personas as initialPersonas } from "./personas";
 import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
@@ -9,19 +9,21 @@ function App() {
     return saved ? JSON.parse(saved) : initialPersonas;
   });
 
-  const [activePersona, setActivePersona] = useState(personas[0]);
+  const [activePersona, setActivePersona] = useState(null);
   const [newPersona, setNewPersona] = useState({
     name: "",
     styles: {
-      backgroundColor: "#ffffff",
-      color: "#000000",
+      gradientType: "linear",
+      colors: ["#ff0000", "#000000"],
+      angle: "45deg", // only for linear
+      textColor: "#ffffff",
       fontFamily: "Arial, sans-serif",
     },
     microcopy: {
       tooltip: "Enter your tooltip here.",
       button: "Enter your button text here.",
     },
-    blurIntensity: "4",
+    blurIntensity: 4,
   });
 
   const [errors, setErrors] = useState({
@@ -31,6 +33,25 @@ function App() {
     blurIntensity: "",
   });
 
+  // Set the first persona as active upon page load
+  useEffect(() => {
+    if (personas.length > 0 && !activePersona) {
+      setActivePersona(personas[0]);
+    }
+  }, [personas, activePersona]);
+
+  // Function to generate gradient background dynamically based on persona styles
+  const generateGradientBackground = (personaStyles) => {
+    const { gradientType, colors, angle } = personaStyles;
+    if (gradientType === "linear") {
+      return `linear-gradient(${angle}, ${colors.join(", ")})`;
+    } else if (gradientType === "radial") {
+      return `radial-gradient(circle, ${colors.join(", ")})`;
+    }
+    return "#ffffff"; // fallback in case of invalid type
+  };
+
+  // Handle changes in input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -70,17 +91,6 @@ function App() {
       isValid = false;
     }
 
-    if (!/^#[0-9A-F]{6}$/i.test(newPersona.styles.backgroundColor)) {
-      newErrors.backgroundColor =
-        "Please select a valid hex color for background.";
-      isValid = false;
-    }
-
-    if (!/^#[0-9A-F]{6}$/i.test(newPersona.styles.color)) {
-      newErrors.textColor = "Please select a valid hex color for text.";
-      isValid = false;
-    }
-
     if (newPersona.blurIntensity < 0 || newPersona.blurIntensity > 20) {
       newErrors.blurIntensity = "Blur intensity must be between 0 and 20.";
       isValid = false;
@@ -92,10 +102,19 @@ function App() {
 
   const handleAddPersona = () => {
     if (validateForm()) {
-      const updatedPersonas = [...personas, newPersona];
+      let updatedPersonas;
+      if (editingIndex !== null) {
+        // We're editing, so replace the existing persona
+        updatedPersonas = [...personas];
+        updatedPersonas[editingIndex] = newPersona;
+      } else {
+        // We're adding a new one
+        updatedPersonas = [...personas, newPersona];
+      }
       setPersonas(updatedPersonas);
       setActivePersona(newPersona);
       localStorage.setItem("personas", JSON.stringify(updatedPersonas));
+      setEditingIndex(null); // 👈 Reset after saving
     }
   };
 
@@ -103,64 +122,132 @@ function App() {
     setNewPersona({
       name: "",
       styles: {
-        backgroundColor: "#ffffff",
-        color: "#000000",
+        gradientType: "linear",
+        colors: ["#ff0000", "#000000"],
+        angle: "45deg",
+        textColor: "#ffffff",
         fontFamily: "Arial, sans-serif",
       },
       microcopy: {
         tooltip: "Enter your tooltip here.",
         button: "Enter your button text here.",
       },
-      blurIntensity: "4",
+      blurIntensity: 4,
     });
     setErrors({});
   };
+  const [editingIndex, setEditingIndex] = useState(null);
   const handleClearPersonas = () => {
     localStorage.removeItem("personas");
     setPersonas(initialPersonas);
     setActivePersona(initialPersonas[0]);
   };
 
+  const handleEditPersona = (index) => {
+    const personaToEdit = personas[index];
+
+    setNewPersona({
+      name: personaToEdit.name || "",
+      styles: {
+        gradientType: personaToEdit.styles.gradientType || "linear",
+        colors: personaToEdit.styles.colors || ["#ff0000", "#000000"],
+        angle: personaToEdit.styles.angle || "45deg",
+        textColor: personaToEdit.styles.textColor || "#ffffff",
+        fontFamily: personaToEdit.styles.fontFamily || "Arial, sans-serif",
+      },
+      microcopy: {
+        tooltip: personaToEdit.microcopy.tooltip || "Enter your tooltip here.",
+        button:
+          personaToEdit.microcopy.button || "Enter your button text here.",
+      },
+      blurIntensity: personaToEdit.blurIntensity ?? 4,
+    });
+
+    setActivePersona(personaToEdit);
+    setEditingIndex(index); // ✅
+  };
+
+  const handleDeletePersona = (index) => {
+    const updatedPersonas = personas.filter((_, i) => i !== index);
+    setPersonas(updatedPersonas);
+    setActivePersona(updatedPersonas[0] || null);
+    localStorage.setItem("personas", JSON.stringify(updatedPersonas));
+  };
+
+  // Default styles if no persona is active yet
+  const backgroundStyle = activePersona
+    ? generateGradientBackground(activePersona.styles)
+    : "linear-gradient(45deg, #ff0000, #000000)";
+
+  const textStyle = activePersona
+    ? {
+        color: activePersona.styles.textColor,
+        fontFamily: activePersona.styles.fontFamily,
+      }
+    : { color: "#ffffff", fontFamily: "Arial, sans-serif" };
+
   return (
     <div>
       <AnimatePresence mode="wait">
         <motion.div
-          key={activePersona.name + "-background"}
+          key={
+            activePersona
+              ? activePersona.name + "-background"
+              : "default-background"
+          }
           className="App"
-          style={activePersona.styles}
+          style={{
+            background: backgroundStyle,
+            color: textStyle.color,
+            fontFamily: textStyle.fontFamily,
+            filter: `blur(${
+              activePersona ? activePersona.blurIntensity : 0
+            }px)`,
+          }}
           initial={{
             opacity: 0,
-            filter: `blur(${activePersona.blurIntensity})`,
+            filter: `blur(${
+              activePersona ? activePersona.blurIntensity : 0
+            }px)`,
           }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, filter: `blur(${activePersona.blurIntensity})` }}
+          exit={{
+            opacity: 0,
+            filter: `blur(${
+              activePersona ? activePersona.blurIntensity : 0
+            }px)`,
+          }}
           transition={{ duration: 0.6 }}
         >
           <h1>PersonaSwap 🎭</h1>
 
           <div className="persona-buttons">
-            {personas.map((persona) => (
-              <button
-                key={persona.name}
-                onClick={() => setActivePersona(persona)}
-              >
-                {persona.name}
-              </button>
+            {personas.map((persona, index) => (
+              <div key={persona.name} className="persona-button-group">
+                <button onClick={() => setActivePersona(persona)}>
+                  {persona.name}
+                </button>
+                <button onClick={() => handleEditPersona(index)}>✏️</button>
+                <button onClick={() => handleDeletePersona(index)}>🗑️</button>
+              </div>
             ))}
           </div>
 
-          <motion.div
-            key={activePersona.name + "-card"}
-            className="preview-card"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2>Preview Area</h2>
-            <p>{activePersona.microcopy.tooltip}</p>
-            <button>{activePersona.microcopy.button}</button>
-          </motion.div>
+          {activePersona && (
+            <motion.div
+              key={activePersona.name + "-card"}
+              className="preview-card"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2>Preview Area</h2>
+              <p>{activePersona.microcopy.tooltip}</p>
+              <button>{activePersona.microcopy.button}</button>
+            </motion.div>
+          )}
+
           <button onClick={handleClearPersonas} className="reset-button">
             Clear Saved Personas
           </button>
@@ -182,30 +269,82 @@ function App() {
           {errors.name && <span className="error">{errors.name}</span>}
 
           <label>
-            Background Color:
-            <input
-              type="color"
-              name="backgroundColor"
-              value={newPersona.styles.backgroundColor}
+            Gradient Type:
+            <select
+              name="gradientType"
+              value={newPersona.styles.gradientType}
               onChange={handleStyleChange}
-            />
+            >
+              <option value="linear">Linear</option>
+              <option value="radial">Radial</option>
+            </select>
           </label>
-          {errors.backgroundColor && (
-            <span className="error">{errors.backgroundColor}</span>
-          )}
+
+          <label>
+            Background Gradient Colors:
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "8px",
+              }}
+            >
+              <input
+                type="color"
+                value={newPersona.styles.colors[0]}
+                onChange={(e) => {
+                  const newColors = [...newPersona.styles.colors];
+                  newColors[0] = e.target.value;
+                  setNewPersona({
+                    ...newPersona,
+                    styles: {
+                      ...newPersona.styles,
+                      colors: newColors,
+                    },
+                  });
+                }}
+              />
+              <input
+                type="color"
+                value={newPersona.styles.colors[1]}
+                onChange={(e) => {
+                  const newColors = [...newPersona.styles.colors];
+                  newColors[1] = e.target.value;
+                  setNewPersona({
+                    ...newPersona,
+                    styles: {
+                      ...newPersona.styles,
+                      colors: newColors,
+                    },
+                  });
+                }}
+              />
+
+              {/* Live Gradient Preview */}
+              <div
+                style={{
+                  width: "60px",
+                  height: "30px",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  background: `linear-gradient(${
+                    newPersona.styles.angle || "90deg"
+                  }, ${newPersona.styles.colors.join(", ")})`,
+                }}
+              />
+            </div>
+          </label>
 
           <label>
             Text Color:
             <input
               type="color"
-              name="color"
-              value={newPersona.styles.color}
+              name="textColor"
+              value={newPersona.styles.textColor}
               onChange={handleStyleChange}
             />
           </label>
-          {errors.textColor && (
-            <span className="error">{errors.textColor}</span>
-          )}
 
           <label>
             Font Family:
@@ -253,7 +392,7 @@ function App() {
           )}
 
           <button type="button" onClick={handleAddPersona}>
-            Add Persona
+            {editingIndex !== null ? "Save Changes" : "Add Persona"}
           </button>
 
           <button type="button" onClick={handleReset} className="reset-button">
