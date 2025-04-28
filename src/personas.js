@@ -8,7 +8,7 @@ export const personas = [
       fontFamily: "Creepster, sans-serif",
     },
     microcopy: {
-      button: "Fine, Submit it.",
+      button: "Fine, Submit it!",
       tooltip: "This will probably break.",
     },
   },
